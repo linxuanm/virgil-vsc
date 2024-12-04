@@ -1,25 +1,32 @@
-// The module 'vscode' contains the VS Code extensibility API
-// Import the module and reference it with the alias vscode in your code below
+import * as path from "path";
 import * as vscode from 'vscode';
+import {
+  LanguageClient,
+  type LanguageClientOptions,
+  type ServerOptions,
+} from "vscode-languageclient/node";
+
+let client: LanguageClient | null = null;
 
 // This method is called when your extension is activated
 // Your extension is activated the very first time the command is executed
-export function activate(context: vscode.ExtensionContext) {
+export async function activate(context: vscode.ExtensionContext) {
+	if (client !== null) {
+		vscode.window.showWarningMessage("Virgil LSP client is already running.");
+		return;
+	}
+	const lspPath = context.asAbsolutePath(path.join('out', 'virgil-lsp'));
+	const serverOpts: ServerOptions = { command: lspPath };
+	console.log(`Starting LSP executable: ${lspPath}`);
 
-	// Use the console to output diagnostic information (console.log) and errors (console.error)
-	// This line of code will only be executed once when your extension is activated
-	console.log('Congratulations, your extension "virgil-vsc" is now active!');
+	const clientOpts: LanguageClientOptions = {
+		documentSelector: [{ scheme: "file", language: "virgil" }],
+	};
 
-	// The command has been defined in the package.json file
-	// Now provide the implementation of the command with registerCommand
-	// The commandId parameter must match the command field in package.json
-	const disposable = vscode.commands.registerCommand('virgil-vsc.helloWorld', () => {
-		// The code you place here will be executed every time your command is executed
-		// Display a message box to the user
-		vscode.window.showInformationMessage('Hello World from virgil-vsc!');
-	});
+	client = new LanguageClient("virgil-vsc", serverOpts, clientOpts);
+  await client.start();
 
-	context.subscriptions.push(disposable);
+	vscode.window.showInformationMessage('Virgil started.');
 }
 
 // This method is called when your extension is deactivated
