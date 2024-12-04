@@ -1,3 +1,0 @@
-[submodule "server/lib/virgil"]
-	path = server/lib/virgil
-	url = https://github.com/titzer/virgil.git
