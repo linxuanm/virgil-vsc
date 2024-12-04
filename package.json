@@ -17,6 +17,26 @@
         "command": "virgil-vsc.helloWorld",
         "title": "Hello World"
       }
+    ],
+    "languages": [
+      {
+        "id": "virgil",
+        "aliases": [
+          "Virgil",
+          "virgil"
+        ],
+        "extensions": [
+          ".v3"
+        ],
+        "configuration": "./language/language-configuration.json"
+      }
+    ],
+    "grammars": [
+      {
+        "language": "virgil",
+        "scopeName": "source.virgil",
+        "path": "./language/virgil.tmLanguage.json"
+      }
     ]
   },
   "scripts": {
