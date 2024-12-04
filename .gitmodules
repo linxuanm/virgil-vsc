@@ -1,0 +1,3 @@
+[submodule "virgil-lsp"]
+	path = virgil-lsp
+	url = https://github.com/linxuanm/virgil-lsp.git
