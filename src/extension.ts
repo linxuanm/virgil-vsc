@@ -2,6 +2,7 @@ import * as path from "path";
 import * as vscode from 'vscode';
 import {
   LanguageClient,
+  TransportKind,
   type LanguageClientOptions,
   type ServerOptions,
 } from "vscode-languageclient/node";
@@ -16,7 +17,10 @@ export async function activate(context: vscode.ExtensionContext) {
 		return;
 	}
 	const lspPath = context.asAbsolutePath(path.join('out', 'virgil-lsp'));
-	const serverOpts: ServerOptions = { command: lspPath };
+	const serverOpts: ServerOptions = {
+		command: lspPath,
+		transport: TransportKind.stdio
+	};
 	console.log(`Starting LSP executable: ${lspPath}`);
 
 	const clientOpts: LanguageClientOptions = {
@@ -29,5 +33,9 @@ export async function activate(context: vscode.ExtensionContext) {
 	vscode.window.showInformationMessage('Virgil started.');
 }
 
-// This method is called when your extension is deactivated
-export function deactivate() {}
+export async function deactivate() {
+	if (client !== null) {
+		await client.stop();
+		client = null;
+	}
+}
